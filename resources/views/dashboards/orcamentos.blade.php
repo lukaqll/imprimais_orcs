@@ -136,7 +136,7 @@
 
 
     <div class="modal fade" aria-modal="true" id="modal-orc">
-        <div class="modal-dialog modal-xxl">
+        <div class="modal-dialog modal-dialog-scrollable modal-xxl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="orc-modal-title"></h4>
@@ -252,12 +252,16 @@
 
                         <div class="row">
                             <div class="col-12 bg-light">
+                                <div class="row" style="gap: 1rem">
+                                    <h3>Itens</h3>
+                                    <button type="button" class="btn btn-outline-primary" id="btn-import-items">Importar</button>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Ítem</th>
+                                                <th>Item</th>
                                                 <th style="width: 10em;">Qtd.</th>
                                                 <th style="width: 10em;">Valor Un.</th>
                                                 <th>Total <span id="total-itens"></span></th>
@@ -367,41 +371,40 @@
         </div>
     </div>
 
-    <!-- MODAL MAIL -->
-    <div class="modal fade" class="modal-md" aria-modal="true" id="modal-mail">
+    <!-- MODAL IMPORT -->
+    <div class="modal fade" class="modal-md" aria-modal="true" id="modal-import">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Enviar Email</h4>
+                    <h4 class="modal-title">Importar Itens</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-mail">
-                        <input type="hidden" name="id_orc">
+                    <form id="form-import">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-12">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control">
+                                    <label for="file-import">Selecionar arquivo</label>
+                                    <input type="file" id="file-import" name="file-import" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-12 text-center">
+                                <span>Ou</span>
+                            </div>
+                            <div class="col-12">
                                 <div class="form-group">
-                                    <textarea name="message" class="form-control" placeholder="Mensagem"></textarea>
+                                    <label for="json-import">Colar JSON</label>
+                                    <textarea name="json-import" class="form-control" id="json-import"></textarea>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <div class="row w-100">
-                        <div class="col-md-12 text-right">
-                            <button  type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fechar</button>
-                            <button type="submit" form="form-mail" class="btn btn-outline-primary"><i class="far fa-paper-plane"></i> Enviar</button>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" form="form-import" class="btn btn-outline-primary">Importar</button>
                 </div>
             </div>
         </div>

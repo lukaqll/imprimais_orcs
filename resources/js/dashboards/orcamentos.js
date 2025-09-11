@@ -2,6 +2,41 @@ const utils = require('../utils.js')
 
 const page = {
     bindEvents: ()=>{
+
+        $('#btn-import-items').on('click', function(){
+            $('#modal-import').modal('show')
+        })
+
+        $('#form-import').on('submit', function(e){
+            e.preventDefault()
+            const fileInput = $('#file-import')
+            const jsonInput = $('#json-import')
+
+            const file = fileInput.val()
+            const json = jsonInput.val()
+
+            if (file) {
+                const content = fileInput[0]?.files[0]
+                const reader = new FileReader()
+                reader.onload = function(e){
+                    page.importItems(e.target.result)
+                    fileInput.val('')
+                    $('#modal-import').modal('hide')
+                }
+                reader.readAsText(content)
+            }
+            if (json) {
+                page.importItems(json)
+                jsonInput.val('')
+                $('#modal-import').modal('hide')
+            }
+        })
+
+        $('#modal-import').on('hidden.bs.modal', function(e){
+            $('#json-import').css('height', 'auto');
+            page.clearImport()
+        })
+
         $('#open-modal-orc').on('click', function(){
             page.resetForm()
             $('#modal-orc').modal('show')
@@ -16,7 +51,7 @@ const page = {
                 qtd: $('#new-item-qtd').val(),
                 valor_un: $('#new-item-valor-un').val(),
             }
-            
+
             if (data.titulo != '' && data.titulo != null ) {
                 page.addItem(data)
             }
@@ -59,9 +94,9 @@ const page = {
          */
         $('#send-mail').on('click', page.setValuesMail)
         $('#form-mail').on('submit', page.sendMail)
-        $('.modal').on('hidden.bs.modal', function(){
-            $('.modal').css('orverflow', 'auto')
-        })
+        // $('.modal').on('hidden.bs.modal', function(){
+        //     $('.modal').css('overflow', 'auto')
+        // })
 
         $('#itens-wrap').on('change', '.update-item', function() {
             const el = $(this)
@@ -84,6 +119,48 @@ const page = {
         })
 
     },
+
+    importItems: function(json){
+        const parsedJson = page.parseJson(json)
+
+        parsedJson.forEach(item => {
+            page.addItem({
+                titulo: item.desc,
+                qtd: item.qty,
+                valor_un: parseFloat(item.unit_price).toFixed(2)
+            })
+        })
+    },
+
+    parseJson: function(json){
+        try {
+            // Tenta fazer parse direto primeiro
+            const parsedJson = JSON.parse(json);
+            return parsedJson;
+        } catch (error) {
+            try {
+                // Se falhar, limpa o JSON (remove quebras de linha e espaços extras)
+                const cleanedJson = json
+                    .replace(/\s*\n\s*/g, '')  // Remove quebras de linha
+                    .replace(/\s*\r\s*/g, '')  // Remove carriage returns
+                    .replace(/\s*\t\s*/g, '')  // Remove tabs
+                    .replace(/\s+/g, ' ')      // Substitui múltiplos espaços por um só
+                    .trim();                   // Remove espaços do início e fim
+
+                const parsedJson = JSON.parse(cleanedJson);
+                return parsedJson;
+            } catch (secondError) {
+                console.error('Erro ao fazer parse do JSON:', secondError);
+                alert('Erro ao processar JSON. Verifique se o formato está correto.');
+            }
+        }
+    },
+
+    clearImport: function(){
+        $('#file-import').val('')
+        $('#json-import').val('')
+    },
+
     resetForm: function(){
         $('#orc-modal-title').html(`Novo orçamento`)
         $('#form-orc').trigger('reset')
