@@ -1,1 +1,262 @@
-(()=>{var t,e,a={581:t=>{var e={status:{1:"Entregue",2:"Concluído",3:"Em Andamento",4:"Aguardando Aprovação",5:"Não Iniciado"},prior:{1:"Alta",2:"Média",3:"Baixa"},serializeObject:function(t){var e={},a=t.serializeArray();return $.each(a,(function(){e[this.name]?(e[this.name].push||(e[this.name]=[e[this.name]]),e[this.name].push(this.value||"")):this.name.match("]")?(e[this.name]=[],e[this.name].push(this.value||"")):e[this.name]=this.value||""})),e},setError:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};Swal.fire({type:"error",title:t.msg,html:t.body?t.body:""})},load:{start:function(){$(".pace").css("z-index","15000"),$(".pace").removeClass("pace-inactive"),$(".pace").addClass("pace-active")},stop:function(){$(".pace").removeClass("pace-active"),$(".pace").addClass("pace-inactive")}},success:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};Swal.fire({type:"success",title:t.title,html:"<p>"+(t.msg?t.msg:"")+"</p>",timer:1e3,showConfirmButton:!1,didOpen:function(){Swal.showLoading(),timerInterval=setInterval((function(){var t=Swal.getContent();if(t){var e=t.querySelector("b");e&&(e.textContent=Swal.getTimerLeft())}}),100)},willClose:function(){clearInterval(timerInterval)}})},toMoney:function(t){if(null==t||""==t)return"0,00";if(parseFloat(t)>0){var e=parseFloat(t).toFixed(2),a=parseFloat(e).toLocaleString("pt-BR",{currency:"BRL"}).split(","),n=a[1]?a[1].padEnd(2,"0"):"00";return a[0]+","+n}return"0,00"},formartDate:function(t){var e=arguments.length>1&&void 0!==arguments[1]&&arguments[1];if(null==t)return"-";var a=t.match("T")?t.split("T"):t.split(" "),n=a[0].split("-"),o=n[2],r=n[1],s=n[0];return o+"/"+r+"/"+s+(a[1]&&e?" "+a[1]:"")},confirm:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};Swal.fire({type:"warning",title:t.title,html:"<p>"+(t.msg?t.msg:"")+"</p>",showCancelButton:!0,confirmButtonText:t.textBtnConfirm||"OK",cancelButtonText:t.textBtnCancel||"Cancelar"}).then((function(e){e.value?t.onConfirm&&t.onConfirm():t.onCancel&&t.onCancel()}))},unMaskMoney:function(t){return t=t.replaceAll(".","").replaceAll(",",".").replaceAll(" ","").replace("R$",""),t=parseFloat(t),!isNaN(t)&&t}};t.exports=e}},n={};function o(t){var e=n[t];if(void 0!==e)return e.exports;var r=n[t]={exports:{}};return a[t](r,r.exports,o),r.exports}t=o(581),e={bindEvens:function(){$("#form-alter-password").on("submit",e.changePass),$("#form-alter-login").on("submit",e.changeLogin)},changePass:function(e){e.preventDefault(),t.load.start(),$.ajax({url:"user/change-pass",type:"post",dataType:"json",data:{password:$("#password").val(),confirm_password:$("#confirm_password").val()},success:function(e){t.load.stop(),e.status?(t.success({title:"Salvo!"}),$("#modal-alter-password").modal("hide"),$("#password").val(""),$("#confirm_password").val("")):t.setError({msg:e.msg})},error:function(e){t.load.stop(),t.setError({msg:e.responseJSON.message})}})},changeLogin:function(e){e.preventDefault(),t.load.start(),$.ajax({url:"user/change-login",type:"post",dataType:"json",data:{login:$("#login").val()},success:function(e){t.load.stop(),e.status?(t.success({title:"Salvo!"}),$("#modal-alter-login").modal("hide"),$("#login").val("")):t.setError({msg:e.msg})},error:function(e){t.load.stop(),t.setError({msg:e.responseJSON.message})}})}},$(document).ready((function(){e.bindEvens()}))})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./resources/js/utils.js":
+/*!*******************************!*\
+  !*** ./resources/js/utils.js ***!
+  \*******************************/
+/***/ ((module) => {
+
+var utils = {
+  status: {
+    1: 'Entregue',
+    2: 'Concluído',
+    3: 'Em Andamento',
+    4: 'Aguardando Aprovação',
+    5: 'Não Iniciado'
+  },
+  prior: {
+    1: 'Alta',
+    2: 'Média',
+    3: 'Baixa'
+  },
+  serializeObject: function serializeObject(form) {
+    var obj = {};
+    var array = form.serializeArray();
+    $.each(array, function () {
+      if (obj[this.name]) {
+        if (!obj[this.name].push) {
+          obj[this.name] = [obj[this.name]];
+        }
+
+        obj[this.name].push(this.value || '');
+      } else {
+        if (this.name.match(']')) {
+          obj[this.name] = [];
+          obj[this.name].push(this.value || '');
+        } else {
+          obj[this.name] = this.value || '';
+        }
+      }
+    });
+    return obj;
+  },
+  setError: function setError() {
+    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    Swal.fire({
+      type: 'error',
+      title: opt.msg,
+      html: opt.body ? opt.body : ''
+    });
+  },
+  load: {
+    start: function start() {
+      $('.pace').css('z-index', '15000');
+      $('.pace').removeClass('pace-inactive');
+      $('.pace').addClass('pace-active');
+    },
+    stop: function stop() {
+      $('.pace').removeClass('pace-active');
+      $('.pace').addClass('pace-inactive');
+    }
+  },
+  success: function success() {
+    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    Swal.fire({
+      type: 'success',
+      title: opt.title,
+      html: '<p>' + (opt.msg ? opt.msg : '') + '</p>',
+      timer: 1000,
+      showConfirmButton: false,
+      didOpen: function didOpen() {
+        Swal.showLoading();
+        timerInterval = setInterval(function () {
+          var content = Swal.getContent();
+
+          if (content) {
+            var b = content.querySelector('b');
+
+            if (b) {
+              b.textContent = Swal.getTimerLeft();
+            }
+          }
+        }, 100);
+      },
+      willClose: function willClose() {
+        clearInterval(timerInterval);
+      }
+    });
+  },
+  toMoney: function toMoney(str) {
+    if (str == null || str == '') return '0,00';
+
+    if (parseFloat(str) > 0) {
+      var val = parseFloat(str).toFixed(2);
+      var array = parseFloat(val).toLocaleString("pt-BR", {
+        currency: "BRL"
+      }).split(',');
+      var decimal = array[1] ? array[1].padEnd(2, '0') : '00';
+      return array[0] + ',' + decimal;
+    } else {
+      return '0,00';
+    }
+  },
+  formartDate: function formartDate(str) {
+    var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    if (str == null) return '-';
+    var dateTimeSplit = str.match('T') ? str.split('T') : str.split(' ');
+    var parts = dateTimeSplit[0].split('-');
+    var day = parts[2];
+    var month = parts[1];
+    var year = parts[0];
+    return day + '/' + month + '/' + year + (dateTimeSplit[1] && time ? ' ' + dateTimeSplit[1] : '');
+  },
+  confirm: function confirm() {
+    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    Swal.fire({
+      type: 'warning',
+      title: opt.title,
+      html: '<p>' + (opt.msg ? opt.msg : '') + '</p>',
+      showCancelButton: true,
+      confirmButtonText: opt.textBtnConfirm || 'OK',
+      cancelButtonText: opt.textBtnCancel || 'Cancelar'
+    }).then(function (result) {
+      // console.log(result)
+      if (result.value) {
+        opt.onConfirm && opt.onConfirm();
+      } else {
+        opt.onCancel && opt.onCancel();
+      }
+    });
+  },
+  unMaskMoney: function unMaskMoney(str) {
+    str = str.replaceAll('.', '').replaceAll(',', '.').replaceAll(' ', '').replace('R$', '');
+    str = parseFloat(str);
+
+    if (isNaN(str)) {
+      return false;
+    } else {
+      return str;
+    }
+  }
+};
+module.exports = utils;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!*******************************************!*\
+  !*** ./resources/js/dashboards/config.js ***!
+  \*******************************************/
+var utils = __webpack_require__(/*! ../utils.js */ "./resources/js/utils.js");
+
+var page = {
+  bindEvens: function bindEvens() {
+    $('#form-alter-password').on('submit', page.changePass);
+    $('#form-alter-login').on('submit', page.changeLogin);
+  },
+  changePass: function changePass(etv) {
+    etv.preventDefault();
+    utils.load.start();
+    $.ajax({
+      url: 'user/change-pass',
+      type: 'post',
+      dataType: 'json',
+      data: {
+        password: $('#password').val(),
+        confirm_password: $('#confirm_password').val()
+      },
+      success: function success(resp) {
+        utils.load.stop();
+
+        if (resp.status) {
+          utils.success({
+            title: 'Salvo!'
+          });
+          $('#modal-alter-password').modal('hide');
+          $('#password').val('');
+          $('#confirm_password').val('');
+        } else {
+          utils.setError({
+            msg: resp.msg
+          });
+        }
+      },
+      error: function error(e) {
+        utils.load.stop();
+        utils.setError({
+          msg: e.responseJSON.message
+        });
+      }
+    });
+  },
+  changeLogin: function changeLogin(etv) {
+    etv.preventDefault();
+    utils.load.start();
+    $.ajax({
+      url: 'user/change-login',
+      type: 'post',
+      dataType: 'json',
+      data: {
+        login: $('#login').val()
+      },
+      success: function success(resp) {
+        utils.load.stop();
+
+        if (resp.status) {
+          utils.success({
+            title: 'Salvo!'
+          });
+          $('#modal-alter-login').modal('hide');
+          $('#login').val('');
+        } else {
+          utils.setError({
+            msg: resp.msg
+          });
+        }
+      },
+      error: function error(e) {
+        utils.load.stop();
+        utils.setError({
+          msg: e.responseJSON.message
+        });
+      }
+    });
+  }
+};
+$(document).ready(function () {
+  page.bindEvens();
+});
+})();
+
+/******/ })()
+;

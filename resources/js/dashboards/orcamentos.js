@@ -127,7 +127,7 @@ const page = {
             page.addItem({
                 titulo: item.desc,
                 qtd: item.qty,
-                valor_un: parseFloat(item.unit_price).toFixed(2)
+                valor_limpo: parseFloat(item.unit_price)
             })
         })
     },
@@ -172,7 +172,7 @@ const page = {
     addItem: function(data){
         const index = page.geraIndex()
 
-        const valor_un = data.id == null || data.id == '' ? utils.unMaskMoney(data.valor_un) : data.valor_un
+        const valor_un = data.valor_limpo !== undefined ? data.valor_limpo : (data.id == null || data.id == '' ? utils.unMaskMoney(data.valor_un) : data.valor_un)
 
         const total = !isNaN(valor_un * parseFloat(data.qtd)) ? valor_un * parseFloat(data.qtd) : 0
         const content = `
